@@ -14,8 +14,8 @@ fn instructions() {
     println!("These are the postions of your board:\n");
     println!(" 1 | 2 | 3 \n-----------\n 4 | 5 | 6 \n-----------\n 7 | 8 | 9 \n");
 
-
-} 
+    println!("You will always go first. To play your turn, choose a postion (1-9), that is not already occupied.\nThe computer will move after you.\n");
+}
 
 
 //Rust sees 'main()' as the entry point for programs. This is where our gameplay occurs
