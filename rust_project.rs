@@ -9,6 +9,17 @@ Date:           April 24, 2024
 use std::io;
 
 
+//gets the users choice if they wish to be x or o.
+fn prompt_user() -> String{
+    
+    let mut user_choice = String::new(); 
+    println!("Choose if you wish to be X or O: ");
+    io::stdin().read_line(&mut user_choice);    
+    
+    return user_choice;
+}
+
+
 //purely for printing out instructions. println! will always have a ! at the end of it to denote that it is a macro
 fn instructions() {
 
@@ -25,5 +36,6 @@ fn instructions() {
 fn main() {
 
     instructions();
-
+    let mut user = prompt_user();
+    println!("{}", user);
 }
