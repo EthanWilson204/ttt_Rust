@@ -5,6 +5,29 @@ Professor:      Ira Woodring
 Date:           April 24, 2024
 */
 
+//libraries and imports. "use" equivalent of include. uses preludes like C++
+use std::io;
+
+
+//gets the users choice if they wish to be x or o.
+fn prompt_user() -> Srting {
+
+    //set choice to be mutable in case of mistakes, and set to "" to indicate string var type
+    let mut user_choice = String::new();
+
+    while user_choice != "X" || user_choice != "O" {
+
+        print!("Choose if you wish to be X or O: ");
+
+        io::stdin()
+            .read_line(&mut user_choice)
+            .expect("Could not read line");
+    }
+
+
+
+}
+
 
 //purely for printing out instructions. println! will always have a ! at the end of it to denote that it is a macro
 fn instructions() {
@@ -22,5 +45,6 @@ fn instructions() {
 fn main() {
 
     instructions();
+    let user = prompt_user();
 
 }
