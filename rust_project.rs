@@ -1,41 +1,82 @@
-/*  
-Author:         Ethan Wilson
-Class:          CIS 343-01
-Professor:      Ira Woodring
-Date:           April 24, 2024
-*/
+use std::io::{self, Write};
 
-//libraries and imports. "use" equivalent of include. uses preludes like C++
-use std::io;
-
-
-//gets the users choice if they wish to be x or o.
-fn prompt_user() -> String{
-    
-    let mut user_choice = String::new(); 
-    println!("Choose if you wish to be X or O: ");
-    io::stdin().read_line(&mut user_choice);    
-    
-    return user_choice;
+fn print_board(board: &[[char; 3]; 3]) {
+    for row in board {
+        println!(" {} | {} | {}", row[0], row[1], row[2]);
+        println!("---|---|---");
+    }
 }
 
+fn check_win(board: &[[char; 3]; 3], player: char) -> bool {
+    // Check rows and columns
+    for i in 0..3 {
+        if (board[i][0] == player && board[i][1] == player && board[i][2] == player)
+            || (board[0][i] == player && board[1][i] == player && board[2][i] == player)
+        {
+            return true;
+        }
+    }
 
-//purely for printing out instructions. println! will always have a ! at the end of it to denote that it is a macro
-fn instructions() {
+    // Check diagonals
+    if (board[0][0] == player && board[1][1] == player && board[2][2] == player)
+        || (board[0][2] == player && board[1][1] == player && board[2][0] == player)
+    {
+        return true;
+    }
 
-    println!("\nWelcome to TicTacToe!!!\n\nThis is your board:\n");
-    println!("   |   |   \n-----------\n   |   |   \n-----------\n   |   |   \n");
-    println!("These are the postions of your board:\n");
-    println!(" 1 | 2 | 3 \n-----------\n 4 | 5 | 6 \n-----------\n 7 | 8 | 9 \n");
-    println!("You will always go first. To play your turn, choose a postion (1-9), that is not already occupied.\nThe computer will move after you.\n");
-
+    false
 }
 
-
-//Rust sees 'main()' as the entry point for programs. This is where our gameplay occurs
 fn main() {
+    println!("Welcome to Tic-Tac-Toe!");
 
-    instructions();
-    let mut user = prompt_user();
-    println!("{}", user);
+    let mut board = [[' '; 3]; 3];
+    let mut current_player = 'X';
+
+    loop {
+        println!("\nCurrent board:");
+        print_board(&board);
+
+        println!("\nPlayer {}, enter your move (row col):", current_player);
+        io::stdout().flush().expect("Failed to flush stdout.");
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Failed to read line.");
+
+        let coords: Vec<usize> = input
+            .split_whitespace()
+            .filter_map(|s| s.parse().ok())
+            .collect();
+
+        if coords.len() != 2 || coords[0] > 2 || coords[1] > 2 {
+            println!("Invalid input. Please enter two numbers between 0 and 2.");
+            continue;
+        }
+
+        let row = coords[0];
+        let col = coords[1];
+
+        if board[row][col] != ' ' {
+            println!("That cell is already occupied. Please choose another one.");
+            continue;
+        }
+
+        board[row][col] = current_player;
+
+        if check_win(&board, current_player) {
+            println!("\nCurrent board:");
+            print_board(&board);
+            println!("Player {} wins!", current_player);
+            break;
+        }
+
+        if board.iter().all(|row| row.iter().all(|&cell| cell != ' ')) {
+            println!("\nCurrent board:");
+            print_board(&board);
+            println!("It's a draw!");
+            break;
+        }
+
+        current_player = if current_player == 'X' { 'O' } else { 'X' };
+    }
 }
